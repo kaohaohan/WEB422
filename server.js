@@ -1,3 +1,18 @@
+/********************************************************************************
+*  WEB422 – Assignment 1
+* 
+*  I declare that this assignment is my own work in accordance with Seneca's
+*  Academic Integrity Policy:
+* 
+*  https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
+* 
+*  Name: ______Hao Han Kao________________ Student ID: ___151604220__________ Date: ____5/14__________
+*
+*  Published URL on Vercel:  https://web-422-pi.vercel.app/
+*
+********************************************************************************/
+
+
 //set up
 const express = require("express");
 var cors = require("cors");
