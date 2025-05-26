@@ -1,17 +1,16 @@
 /********************************************************************************
-*  WEB422 – Assignment 1
-* 
-*  I declare that this assignment is my own work in accordance with Seneca's
-*  Academic Integrity Policy:
-* 
-*  https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
-* 
-*  Name: ______Hao Han Kao________________ Student ID: ___151604220__________ Date: ____5/14__________
-*
-*  Published URL on Vercel:  https://web-422-pi.vercel.app/
-*
-********************************************************************************/
-
+ *  WEB422 – Assignment 1
+ *
+ *  I declare that this assignment is my own work in accordance with Seneca's
+ *  Academic Integrity Policy:
+ *
+ *  https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
+ *
+ *  Name: ______Hao Han Kao________________ Student ID: ___151604220__________ Date: ____5/14__________
+ *
+ *  Published URL on Vercel:  https://web-422-pi.vercel.app/
+ *
+ ********************************************************************************/
 
 //set up
 const express = require("express");
@@ -44,16 +43,15 @@ app.get("/", (req, res) => {
 
 app.post("/api/sites", (req, res) => {
   const data = req.body;
-  db.addNewSite(data).then((siteData) => {
-    res
-      .status(201)
-      .json(siteData)
-      .catch((err) => {
-        res.status(500).json({
-          message: err,
-        });
+  db.addNewSite(data)
+    .then((siteData) => {
+      res.status(201).json(siteData);
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err.message || "An unexpected error occurred",
       });
-  });
+    });
 });
 
 app.get("/api/sites", (req, res) => {
@@ -81,11 +79,15 @@ app.get("/api/sites/:id", (req, res) => {
 
   db.getSiteById(id)
     .then((siteData) => {
-      return res.status(201).json(siteData);
+      if (siteData) {
+        return res.status(200).json(siteData);
+      } else {
+        return res.status(404).json({ message: "Site not found" });
+      }
     })
     .catch((err) => {
       res.status(500).json({
-        message: err,
+        message: err.message || "An unexpected error occurred",
       });
     });
 });
@@ -95,18 +97,18 @@ app.put("/api/sites/:id", (req, res) => {
   const { id } = req.params;
   const data = req.body;
   db.updateSiteById(data, id)
-    .then((sitesData) => {
-      return res.status(201).json("Updated successed");
+    .then(() => {
+      // Typically, update operations don't return the full dataset unless specified.
+      return res.status(200).json({ message: "Updated successfully" });
     })
     .catch((err) => {
       res.status(500).json({
-        message: err,
+        message: err.message || "An unexpected error occurred",
       });
     });
 });
 
 //DELETE
-
 app.delete("/api/sites/:id", (req, res) => {
   const { id } = req.params;
 
@@ -119,4 +121,9 @@ app.delete("/api/sites/:id", (req, res) => {
         message: err,
       });
     });
+});
+
+// Middleware for 404 errors
+app.use((req, res) => {
+  res.status(404).json({ message: "Resource not found" });
 });
